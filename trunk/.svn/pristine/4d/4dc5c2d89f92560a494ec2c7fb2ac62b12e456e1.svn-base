@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h3>Patient Records</h3>
+    <ul class="list-group">
+    {% for rec in records %}
+        <li class="list-group-item">{{ rec.doctors_note }}</li>
+    {% endfor %}
+    </ul>
+{% endblock %}
+
+

@@ -1,0 +1,10 @@
+from django.conf.urls import url, include
+from django.contrib.auth import views as auth_views
+
+from . import views
+
+app_name = 'system'
+urlpatterns = [
+        url(r'^account/register/$', views.UserCreate.as_view(), name='register'),
+        url(r'^account/login/$', auth_views.login, name='login')
+    ]

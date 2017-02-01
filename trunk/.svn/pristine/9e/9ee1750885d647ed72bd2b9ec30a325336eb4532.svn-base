@@ -1,0 +1,20 @@
+from django.shortcuts import render
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic import edit, DetailView 
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django import forms
+from . import models
+
+# User Generic Views.
+class UserCreate(edit.CreateView):
+    model = models.User
+    form_class = UserCreationForm
+    template_name = "system/registration_form.html"
+    success_url = reverse_lazy('system:login')
+
+@method_decorator(login_required, name='dispatch')
+class UserDetail(DetailView):
+    model = models.User
+    slug_field = "username"

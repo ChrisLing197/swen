@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <p style='float:left; padding:10px'>[Doctor] {{ user.user.username }}</p>
+    <a href='{% url 'system:logout' %}' class="btn btn-primary">Logout</a>
+    <div class="row">
+        <h2>Dashboard</h2>
+        <div class="col-md-4">
+            <h3>Records</h3>
+            <a class="btn btn-primary" style="width:100%; margin:2px" href="{% url 'system:rec_new' %}">New Record</a>
+            <h3>Patients</h3>
+            <ul class="list-group">
+                {% for p in ptnts %}
+                {% if p.in_hospital %}
+                <li class="list-group-item"><a class="btn btn-primary" style="width:100px" href="{% url 'system:dsch_ptnt' p.user.id %}">Discharge</a> <a class="btn btn-primary" style="width:100px" href="{% url 'system:transf_hosp' p.user.id %}">Transfer</a> <a class="btn btn-primary"  style="width:100px" href="{% url 'system:rec_dr' p.user.id %}">Records</a> {{ p.user.first_name }} {{ p.user.last_name }}</li>
+                {% else %}
+                <li class="list-group-item"><a class="btn btn-primary" style="width:100px" href="{% url 'system:admit_ptnt' p.user.id %}">Admit</a> <a class="btn btn-primary"  style="width:100px" href="{% url 'system:rec_dr' p.user.id %}">Records</a> {{ p.user.first_name }} {{ p.user.last_name }}</li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-8">
+            {% include "system/appointments.html" %}
+        </div>
+        <div class="col-md-4">
+            {% include "system/messages.html" %}
+        </div>
+    </div>
+{% endblock %}

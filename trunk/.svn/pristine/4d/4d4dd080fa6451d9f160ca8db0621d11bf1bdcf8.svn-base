@@ -1,0 +1,2 @@
+{% for row in data %}"{{ row.patient|addslashes }}", "{{ row.patient_readable|addslashes }}", "{{ row.doctor|addslashes }}", "{{ row.record_type|addslashes }}", "{{ row.doctors_note|addslashes }}"
+{% endfor %}

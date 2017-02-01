@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h2>Dashboard</h2>
+    <p style='float:left; padding:10px'>Doctor logged in as {{ user.user.username }}</p>
+    <a href='{% url 'system:logout' %}' class="btn btn-primary">Logout</a>
+    {% include "system/appointments.html" %}
+{% endblock %}

@@ -1,0 +1,5 @@
+<ul class="list-group">
+{% for rec in records %}
+    <li class="list-group-item">{{ rec.doctors_note }}</li>
+{% endfor %}
+</ul>

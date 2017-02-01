@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="col-md-12 col-sm-12">
+        <h2>Dashboard</h2>
+        <p style='float:left; padding:10px'>Patient logged in as {{ user.user.username }}</p>
+        <a href='{% url 'system:logout' %}' class="btn btn-primary">Logout</a>
+    </div>
+    <div class="col-md-4 col-sm-4">
+        {% include "system/patient_info.html" %}
+    </div>
+    <div class="col-md-8 col-sm-8">
+        {% include "system/appointments.html" %}
+    </div>
+{% endblock %}

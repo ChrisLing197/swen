@@ -1,0 +1,24 @@
+from django.shortcuts import render
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic.edit import CreateView, FormView 
+from django import forms
+from . import models
+
+# Forms
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = models.User
+        fields = ['first_name', 'last_name', 'username', 'password', 'email']
+        widgets = {
+                'password': forms.PasswordInput()
+            }
+
+# User Creation Generic View.
+class UserCreate(CreateView):
+        model = models.User
+        form_class = UserForm
+        template_name = "system/registration_form.html"
+        success_url = reverse_lazy('system:login')
+
+def login():
+    return "Login not implemented"

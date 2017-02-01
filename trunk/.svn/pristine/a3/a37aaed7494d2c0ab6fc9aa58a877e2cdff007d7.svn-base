@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <p style='float:left; padding:10px'>[Nurse] {{ user.user.username }}</p>
+    <a href='{% url 'system:logout' %}' class="btn btn-primary">Logout</a>
+    <div class="row">
+        <h2>Dashboard</h2>
+        <div class="col-md-4">
+            <h3>Patients</h3>
+            <ul class="list-group">
+                {% for p in ptnts %}
+                {% if p.in_hospital %}
+                <li class="list-group-item">[Admitted] {{ p.user.first_name }} {{ p.user.last_name }}</li>
+                {% else %}
+                <li class="list-group-item"><a class="btn btn-primary" style="width:100px" href="{% url 'system:admit_ptnt' p.user.id %}">Admit</a> {{ p.user.first_name }} {{ p.user.last_name }}</li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

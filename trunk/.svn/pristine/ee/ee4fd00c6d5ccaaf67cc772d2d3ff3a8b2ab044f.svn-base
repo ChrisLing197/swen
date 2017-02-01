@@ -1,0 +1,12 @@
+<h3 style="text-align: center;">Patient Information</h3>
+<p>Name: {{ user.user.first_name }} {{ user.user.last_name }}</p>
+<p>Primary Care Physician: {{ user.primary_care.user.first_name }} {{ user.primary_care.user.last_name }}
+<p>Username: {{ user.user.username }}</p>
+<p>E-Mail: {{ user.user.email }}</p>
+<p>Phone: {{ user.phone_number }}</p>
+<p>Date of Birth: {{ user.date_of_birth }}</p>
+<p>Address: {{ user.mail_address }}</p>
+<p>Joined Healthnet on {{ user.date_registered }}</p>
+<form action="/accounts/register/" method="get">
+    <input class="btn btn-primary" type="submit" value="Edit Profile Info"/>
+</form>

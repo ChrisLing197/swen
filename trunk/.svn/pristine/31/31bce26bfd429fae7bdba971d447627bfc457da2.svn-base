@@ -1,0 +1,14 @@
+from django.conf.urls import url, include
+from django.contrib.auth import views as auth_views
+
+from . import views
+
+app_name = 'system'
+urlpatterns = [
+        url(r'^accounts/register/$', views.UserCreate.as_view(), name='register'),
+        url(r'^accounts/profile/$', views.UserDetail.as_view(), name='profile'),
+        url(r'^accounts/profile/edit/$', views.UserRegister.as_view(), name='edit_profile'),
+        url(r'^accounts/', include('django.contrib.auth.urls')),
+        url(r'^dashboard/$', views.dashboard, name='dashboard'),
+        url(r'^appointments/new/$', views.ApptCreate.as_view(), name='appt_new')
+    ]

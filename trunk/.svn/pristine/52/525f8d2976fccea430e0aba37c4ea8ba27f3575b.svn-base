@@ -1,0 +1,11 @@
+<h3>Appointments</h3>
+<ul>
+{% for appt in appts %}
+    <li>Meeting between Dr. {{ appt.doctor.user.first_name }} {{ appt.doctor.user.last_name }} and {{ appt.patient.user.first_name }} {{ appt.patient.user.last_name }} at {{ appt.date_scheduled }}. Created on {{ appt.date_created }}</li>
+{% empty %}
+    <li>You currently have no appointments.</li>
+{% endfor %}
+</ul>
+<form action="/appointments/new/" method="get">
+    <input type="submit" value="Create New Appointment"/>
+</form>

@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <p style='float:left; padding:10px'>[Patient] {{ user.user.username }}</p>
+    <a href='{% url 'system:logout' %}' class="btn btn-primary">Logout</a>
+    <div class="row">
+        <h2>Dashboard</h2>
+        {% if user.in_hospital %}
+        <h4>YOU ARE CURRENTLY IN THE HOSPITAL</h4>
+        {% endif %}
+        <div class="col-md-4 col-sm-4">
+            {% include "system/patient_info.html" %}
+        </div>
+        <div class="col-md-8 col-sm-8">
+            {% include "system/appointments.html" %}
+        </div>
+        <div class="col-md-4">
+            {% include "system/messages.html" %}
+        </div>
+    </div>
+{% endblock %}

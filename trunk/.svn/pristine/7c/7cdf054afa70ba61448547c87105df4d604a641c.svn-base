@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+    <p>Doctor logged in as {{ object.user.username }}</p>
+    {% include "system/appointments.html" %}
+{% endblock %}

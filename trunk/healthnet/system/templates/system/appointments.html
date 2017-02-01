@@ -1,0 +1,11 @@
+<h3 style="text-align: center;">Appointments</h3>
+<ul class="list-group">
+{% for appt in appts %}
+    <li class="list-group-item">Meeting between Dr. {{ appt.doctor.user.first_name }} {{ appt.doctor.user.last_name }} and {{ appt.patient.user.first_name }} {{ appt.patient.user.last_name }} at {{ appt.date_scheduled }}. Created on {{ appt.date_created }} 
+        <a href="{% url 'system:appt_upd' appt.id %}">Edit</a> <a href="{% url 'system:appt_del' appt.id %}">Delete</a>
+    </li>
+{% empty %}
+    <li class="list-group-item">You currently have no appointments.</li>
+{% endfor %}
+</ul>
+<a class="btn btn-primary" href="{% url 'system:appt_new' %}">Create New Appointment</a>

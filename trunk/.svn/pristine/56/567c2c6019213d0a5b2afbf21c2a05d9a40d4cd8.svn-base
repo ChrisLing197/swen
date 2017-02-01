@@ -1,0 +1,5 @@
+{% extends layout.html }
+
+{% block content }
+    <p>Welcome {{ object.user.username }} to the nurse dashboard</p>
+{% endblock }

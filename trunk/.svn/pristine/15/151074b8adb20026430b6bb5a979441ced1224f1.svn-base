@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h2>Dashboard</h2>
+    <p style='float:left; padding:10px'>Admin logged in as {{ user.user.username }}</p>
+    <form action='/logout/' method='get' style='display:inline;'>
+        <div class='form-group'>
+            <input type='submit' value='Logout'/>
+        </div>
+    </form>
+    {% include "system/system_logs.html" %}
+{% endblock %}

@@ -1,0 +1,112 @@
+from django import forms
+from django.shortcuts import get_object_or_404,render, redirect
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic import edit, DetailView 
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import logout
+from . import forms
+from . import models
+
+# User Generic Views.
+class UserCreate(edit.CreateView):
+    model = models.User
+    form_class = forms.MyRegistrationForm
+    template_name = "system/registration_form.html"
+    success_url = reverse_lazy('system:edit_profile')
+
+@method_decorator(login_required, name='dispatch')
+class UserRegister(edit.UpdateView):
+    model = models.Registration
+    fields = ['role', 'primary_care', 'date_of_birth', 'phone_number', 'mail_address']
+    template_name = "system/registration_profile_info.html"
+    success_url = reverse_lazy('system:dashboard')
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(models.Registration, user=self.request.user)
+
+@login_required
+def dashboard(request):
+    model = models.Registration
+    user = get_object_or_404(models.Registration, user=request.user)
+    model = models.Appointment
+    if user.role == models.Registration.DOCTOR:
+        appt = model.objects.filter(doctor=user)
+    else:
+        appt = model.objects.filter(patient=user)
+
+    model = models.Activity
+    system_act = model.objects.all()
+
+    if user.role == models.Registration.DOCTOR:
+        template_name = "system/doctor_dashboard.html"
+    elif user.role == models.Registration.PATIENT:
+        template_name = "system/patient_dashboard.html"
+    elif user.role == models.Registration.NURSE:
+        template_name = "system/nurse_dashboard.html"
+    elif user.role == models.Registration.ADMIN:
+        template_name = "system/admin_dashboard.html"
+    return render(request, template_name, context={'user':user, 'appts':appt, 'sys':system_act})
+
+def index(request):
+    return render(request, "system/home.html")
+
+def logout_view(request):
+    logout(request)
+    return redirect('/accounts/login/')
+
+
+# Appt Generic Views
+@method_decorator(login_required, name='dispatch')
+class ApptCreatePatient(edit.CreateView):
+    model = models.Appointment
+    fields = ['doctor', 'date_scheduled']
+    template_name = "system/appointment_form.html"
+    success_url = reverse_lazy("system:dashboard")
+
+    def form_valid(self, form):
+        patient = models.Registration.objects.get(user=self.request.user)
+        self.object = form.save(commit=False)
+        self.object.patient = patient
+        self.object.save()
+        return super(edit.ModelFormMixin, self).form_valid(form)
+
+# Appt Generic Views
+@method_decorator(login_required, name='dispatch')
+class ApptCreateDoctor(edit.CreateView):
+    model = models.Appointment
+    fields = ['patient', 'date_scheduled']
+    template_name = "system/appointment_form.html"
+    success_url = reverse_lazy("system:dashboard")
+
+    def form_valid(self, form):
+        doctor = models.Registration.objects.get(user=self.request.user)
+        self.object = form.save(commit=False)
+        self.object.doctor = doctor
+        self.object.save()
+        return super(edit.ModelFormMixin, self).form_valid(form)
+
+@method_decorator(login_required, name='dispatch')
+class ApptUpdateDoctor(edit.UpdateView):
+    model = models.Appointment
+    fields = ['patient', 'date_scheduled']
+    template_name = "system/appointment_form.html"
+    success_url = reverse_lazy("system:dashboard")
+
+@method_decorator(login_required, name='dispatch')
+class ApptUpdatePatient(edit.UpdateView):
+    model = models.Appointment
+    fields = ['doctor', 'date_scheduled']
+    template_name = "system/appointment_form.html"
+    success_url = reverse_lazy("system:dashboard")
+
+@method_decorator(login_required, name='dispatch')
+class ApptDeleteDoctor(edit.DeleteView):
+    model = models.Appointment
+    success_url = reverse_lazy("system:dashboard")
+
+@method_decorator(login_required, name='dispatch')
+class ApptDeletePatient(edit.DeleteView):
+    model = models.Appointment
+    success_url = reverse_lazy("system:dashboard")

@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <p style='float:left; padding:10px'>[Patient] {{ user.user.username }}</p>
+    <a href='{% url 'system:logout' %}' class="btn btn-primary">Logout</a>
+    <div class="row">
+        <h2>Dashboard</h2>
+        {% if user.in_hospital %}
+        <h4>YOU ARE CURRENTLY IN THE HOSPITAL</h4>
+        {% endif %}
+        <div class="col-md-4 col-sm-4">
+            {% include "system/patient_info.html" %}
+        </div>
+        <div class="col-md-8 col-sm-8">
+            {% include "system/appointments.html" %}
+            {% include "system/messages.html" %}
+            <h3>Records</h3>
+            <ul class="list-group">
+            {% for record in records %}
+                <li class="list-group-item"><a class="btn btn-primary" href="{% url 'system:rec_exp' record.id %}">Export</a> {{ record.record_type }} - Dr. {{ record.doctor.user.first_name }} {{ record.doctor.user.last_name }}: {{ record.doctors_note }} </li>
+            {% empty %}
+                <li class="list-group-item">No Records</li>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

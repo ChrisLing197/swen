@@ -1,0 +1,32 @@
+from django.shortcuts import get_object_or_404
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic import edit, DetailView 
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from . import models
+from django.core.mail import send_mail
+
+# User Generic Views.
+class UserCreate(edit.CreateView):
+    model = models.User
+    form_class = UserCreationForm
+    template_name = "system/registration_form.html"
+    success_url = reverse_lazy('system:edit_profile')
+
+@method_decorator(login_required, name='dispatch')
+class UserRegister(edit.UpdateView):
+    model = models.Registration
+    fields = ['role', 'date_of_birth', 'phone_number', 'mail_address']
+    template_name = "system/registration_form.html"
+    success_url = reverse_lazy('system:profile')
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(models.Registration, user=self.request.user)
+
+@method_decorator(login_required, name='dispatch')
+class UserDetail(DetailView):
+    model = models.Registration
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(models.Registration, user=self.request.user)

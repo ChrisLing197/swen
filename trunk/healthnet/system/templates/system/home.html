@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h3>Welcome to HealthNet!</h3>
+<div style="float:left; padding:5px">
+    <form action="/accounts/login" method="get">
+        <input class="btn btn-primary" style="width:100px; padding:5px;" type="submit" value="Login"/>
+    </form>
+</div>
+<div style="float:left; padding:5px">
+    <form action="/accounts/new" method="get">
+        <input class="btn btn-primary" style="width:100px; padding:5px;" type="submit" value="Register"/>
+    </form>
+</div>
+<br>
+<br>
+<br>
+<p>At its core, HealthNet is meant to enable hospitals in the US to be able to manage both employees and patients. The successful implementation should make it easy for users to easily sign-up as patients so that the hospital can easily manage everything in their day-to-day work-flow.
+The HealthNet product is intended to improve hospitals by providing an easy mechanism for managing employees, gathering statistical data on the inner workings of the hospital, signing up patients, making appointments, and allowing ease of transfer of both patients and their information between hospitals. 
+
+We want a product whose emphasis is on ease of use, whose navigation is straightforward and where the status of any, and all, information shown is clearly displayed. Ultimately, a system where understanding and communication about hospital and patient matters is improved.</p>
+{% endblock %}

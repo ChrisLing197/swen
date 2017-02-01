@@ -1,0 +1,20 @@
+from django.conf.urls import url, include
+from django.contrib.auth import views as auth_views
+
+from . import views
+
+app_name = 'system'
+urlpatterns = [
+        url(r'^accounts/new/$', views.UserCreate.as_view(), name='register'),
+        url(r'^accounts/register/$', views.UserRegister.as_view(), name='edit_profile'),
+        url(r'^accounts/', include('django.contrib.auth.urls')),
+        url(r'^dashboard/$', views.dashboard, name='dashboard'),
+        url(r'^manage/accounts/$', views.UserList.as_view(), name='user_list'),
+        url(r'^manage/accounts/new$', views.StaffCreate.as_view(), name='staff_register'),
+        url(r'^manage/accounts/delete/(?P<pk>[0-9]+)/', views.UserDelete.as_view(), name='user_del'),
+        url(r'^appointments/new/$', views.create_appt, name='appt_new'),
+        url(r'^appointments/(?P<pk>[0-9]+)/', views.update_appt, name='appt_upd'),
+        url(r'^appointments/delete/(?P<pk>[0-9]+)/', views.delete_appt, name='appt_del'),
+        url(r'^$', views.index, name='home'),
+        url(r'^logout/$', views.logout_view, name='logout')
+    ]

@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h2>Dashboard</h2>
+    <p style='float:left; padding:10px'>Nurse logged in as {{ user.user.username }}</p>
+    <form action='/logout/' method='get' style='display:inline;'>
+        <input class="btn btn-primary" type='submit' value='Logout'/>
+    </form>
+{% endblock %}

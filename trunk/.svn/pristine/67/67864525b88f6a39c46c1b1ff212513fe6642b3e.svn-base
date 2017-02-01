@@ -1,0 +1,5 @@
+{% extends layout.html }
+
+{% block content }
+    <p>Welcome {{ object.user.username }} to the admin dashboard</p>
+{% endblock }

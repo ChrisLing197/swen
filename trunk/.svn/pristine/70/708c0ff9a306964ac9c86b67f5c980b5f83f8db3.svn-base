@@ -1,0 +1,4 @@
+python3.4 ./manage.py makemigrations
+python3.4 ./manage.py migrate
+python3.4 ./manage.py test system
+python3.4 ./manage.py runserver

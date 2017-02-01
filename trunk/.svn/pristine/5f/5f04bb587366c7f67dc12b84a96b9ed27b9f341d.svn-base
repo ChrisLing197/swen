@@ -1,0 +1,14 @@
+Dependencies:
+    Python 3.4.3
+    Django 1.9.1
+
+Initial setup:
+
+python manage.py makemigrations
+python manage.py migrate
+python create_admin.py
+python manage.py runserver
+
+Running:
+
+python manage.py runserver

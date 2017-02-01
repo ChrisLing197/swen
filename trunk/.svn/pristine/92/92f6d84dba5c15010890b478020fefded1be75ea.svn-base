@@ -1,0 +1,121 @@
+from django.db import models
+from django.db.models import Q
+from django.contrib.auth.models import AbstractUser
+
+# User models
+class User(AbstractUser):
+    DOCTOR = "DR"
+    PATIENT = "PT"
+    NURSE = "NR"
+    ADMIN = "AD"
+
+    ROLE_TYPE_CHOICES = (
+            (DOCTOR, "Doctor"),
+            (PATIENT, "Test Results"),
+            (NURSE, "Nurse"),
+            (ADMIN, "Admin")
+        )
+
+    primary_care =  models.ForeignKey("self",
+            related_name="patients",
+            limit_choices_to={'role': DOCTOR}
+        )
+
+    role       = models.CharField(
+            max_length=2,
+            choices=ROLE_TYPE_CHOICES
+        )
+    date_registered = models.DateField(auto_now=True)
+    date_of_birth   = models.DateField()
+    phone_number    = models.CharField(max_length=10)
+    mail_address    = models.TextField()
+
+# Data Models
+class Appointment(models.Model):
+    patient = models.ForeignKey("User",
+            limit_choices_to={'role': User.PATIENT},
+            related_name="appointments_patient"
+        )
+    doctor = models.ForeignKey("User",
+            limit_choices_to={'role': User.DOCTOR},
+            related_name="appointments_doctor"
+        )
+    
+    date_created = models.DateTimeField(auto_now=True)
+    date_scheduled = models.DateTimeField()
+
+class Prescription(models.Model):
+    patient = models.ForeignKey("User",
+            limit_choices_to={'role': User.PATIENT},
+            related_name="prescriptions_patient"
+        )
+    doctor = models.ForeignKey("User",
+            limit_choices_to={'role': User.DOCTOR},
+            related_name="prescriptions_doctor"
+        )
+    record = models.ForeignKey("Record")
+
+    medicine = models.CharField(max_length=128)
+    dosage = models.TextField()
+    doctors_note = models.TextField()
+    pharmacy = models.TextField()
+
+class Record(models.Model):
+    DIAGNOSIS = "DG"
+    TEST_RESULTS = "TR"
+    HOSPITAL = "HR"
+    SYMPTOMS = "SY"
+
+    RECORD_TYPE_CHOICES = (
+            (DIAGNOSIS, "Diagnosis"),
+            (TEST_RESULTS, "Test Results"),
+            (HOSPITAL, "Hospital Record"),
+            (SYMPTOMS, "Symptoms")
+        )
+
+    patient = models.ForeignKey("User",
+            limit_choices_to={'role': User.PATIENT},
+            related_name="records_patient"
+        )
+    doctor  = models.ForeignKey("User",
+            limit_choices_to=(Q(role__exact=User.DOCTOR)|Q(role__exact=User.NURSE)),
+            related_name="records_doctor"
+        )
+    appointment = models.ForeignKey("Appointment")
+
+    record_type = models.CharField(
+            max_length=2,
+            choices=RECORD_TYPE_CHOICES
+        )
+    doctors_note = models.TextField()
+
+class Activity(models.Model):
+    REGISTRATION = "RG"
+    APPOINTMENT = "AP"
+    PRESCRIPTION = "PS"
+    RECORD = "RC"
+    LOGIN = "LG"
+
+    ACTIVITY_TYPE_CHOICES = (
+            (REGISTRATION,"Registration"),
+            (APPOINTMENT,"Appointment"),
+            (PRESCRIPTION,"Prescription"),
+            (RECORD,"Record"),
+            (LOGIN,"Login"),
+        )
+    
+    activity_type = models.CharField(
+                max_length=2,
+                choices=ACTIVITY_TYPE_CHOICES
+            )
+    timestamp = models.DateTimeField(auto_now=True)
+    user_responsible = models.ForeignKey("User")
+    description = models.TextField()
+
+class Message(models.Model):
+    timestamp = models.DateTimeField(auto_now=True)
+    sender = models.ForeignKey("User",
+            related_name="sent_messages")
+    recipient = models.ForeignKey("User",
+            related_name="received_messages")
+    text = models.TextField()

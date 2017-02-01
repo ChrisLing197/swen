@@ -1,0 +1,21 @@
+<h3 style="text-align: center;">Appointments</h3>
+<ul class="list-group">
+{% for appt in appts %}
+    <li class="list-group-item">Meeting between Dr. {{ appt.doctor.user.first_name }} {{ appt.doctor.user.last_name }} and {{ appt.patient.user.first_name }} {{ appt.patient.user.last_name }} at {{ appt.date_scheduled }}. Created on {{ appt.date_created }}. 
+    {% if user.role == "DR" %}
+        <a href="/appointments/doctor/{{ appt.id }}">Edit</a> <a href="/appointments/doctor/delete/{{ appt.id }}">Delete</a>
+    {% else %}
+        <a href="/appointments/patient/{{ appt.id }}">Edit</a> <a href="/appointments/patient/delete/{{ appt.id }}">Delete</a>
+    {% endif %}
+    </li>
+{% empty %}
+    <li class="list-group-item">You currently have no appointments.</li>
+{% endfor %}
+</ul>
+{% if user.role == "DR" %}
+<form action="/appointments/new/doctor" method="get">
+{% else %}
+<form action="/appointments/new/patient" method="get">
+{% endif %}
+    <input class="btn btn-primary" type="submit" value="Create New Appointment"/>
+</form>
